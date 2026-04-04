@@ -1,136 +1,148 @@
 "use client";
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
 const plans = [
   {
     name: "Starter",
-    tagline: "Für Betriebe, die keine Anrufe mehr verpassen wollen",
+    desc: "Für Betriebe, die keine Anrufe mehr verpassen wollen",
     price: "99",
-    priceLabel: "Ab 99 €",
-    period: "Per Month",
+    priceNote: "Ab",
     featured: false,
     features: [
-      "Anrufe werden automatisch angenommen",
-      "24/7 erreichbar – auch wenn du im Termin bist",
-      "Erste einfache Vorqualifizierung",
-      "Nur noch relevante Anfragen landen bei dir",
-      "Termine werden automatisch gebucht",
+      "Anrufe automatisch annehmen",
+      "24/7 erreichbar",
+      "Einfache Vorqualifizierung",
+      "Relevante Anfragen filtern",
+      "Automatische Terminbuchung",
     ],
   },
   {
-    name: "Pro",
-    tagline: "Für Betriebe, die wachsen wollen – ohne mehr Chaos",
+    name: "Professional",
+    desc: "Für Betriebe, die wachsen wollen — ohne mehr Chaos",
     price: "149",
-    priceLabel: "Ab 149 €",
-    period: "Per Month",
+    priceNote: "Ab",
     featured: true,
-    badge: "Empfohlen",
+    badge: "Beliebteste Wahl",
     features: [
-      "Anrufe werden automatisch angenommen",
-      "24/7 erreichbar – auch wenn du im Termin bist",
-      "Erste einfache Vorqualifizierung",
-      "Nur noch relevante Anfragen landen bei dir",
-      "Termine werden automatisch gebucht",
-      "Automatische Info Meldung",
-      "Weniger Unterbrechungen im Alltag",
+      "Alles aus Starter +",
+      "Kontaktpunkt-Sequenzen",
+      "Intelligente Follow-Up Sequenzen",
+      "Automatische Terminvereinbarung",
+      "Priorisiert wichtige Anfragen",
+      "Weniger Unterbrechungen",
+      "Automatische Info-Meldungen",
     ],
   },
   {
     name: "Enterprise",
-    tagline: "Für Betriebe, die maximale Zeitersparnis wollen",
+    desc: "Für Betriebe, die maximale Zeitersparnis wollen",
     price: null,
-    priceLabel: "Auf Anfrage",
-    period: "Per Month",
+    priceNote: "",
     featured: false,
     features: [
-      "Anrufe werden automatisch angenommen",
-      "24/7 erreichbar – auch wenn du im Termin bist",
-      "Erste einfache Vorqualifizierung",
-      "Nur noch relevante Anfragen landen bei dir",
-      "Termine werden automatisch gebucht",
-      "Automatische Info Meldung",
-      "Weniger Unterbrechungen im Alltag",
+      "Alles aus Professional +",
       "Persönlicher digitaler Assistent",
       "Angebotserstellung automatisiert",
       "Rechnungserstellung automatisiert",
-      "E-Mail-Kommunikation wird übernommen",
-      "Individuelle Automatisierungen (auf deinen Betrieb angepasst)",
+      "E-Mail-Kommunikation übernommen",
+      "Multi-Channel (E-Mail, SMS, WhatsApp)",
+      "Individuelle Automatisierungen",
     ],
   },
 ];
 
 export default function PricingSection() {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
+  const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="preise" className="py-20 px-4 bg-white" ref={ref}>
-      <div className="max-w-5xl mx-auto">
+    <section id="preise" className="relative py-28 px-4" ref={ref}>
+      <div className="divider" />
+      <div className="orb-purple right-0 top-1/3" />
+
+      <div className="relative z-10 max-w-6xl mx-auto pt-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-            Wähle dein Paket
+          <span className="section-label mb-4">Preise</span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mt-5 mb-5">
+            Wähle deinen{" "}
+            <span className="text-gradient">Plan</span>
           </h2>
-          <p className="text-slate-600">Drei Stufen – passend zu deinem Vertrieb.</p>
+          <p className="text-white/35 max-w-lg mx-auto text-base">
+            Drei Stufen — passend zu deinem Betrieb. Starte klein, skaliere groß.
+          </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-5 items-start">
+        <div className="grid md:grid-cols-3 gap-4 items-start">
           {plans.map((plan, i) => (
             <motion.div
               key={plan.name}
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: i * 0.12, duration: 0.5 }}
-              className={`relative rounded-2xl p-6 flex flex-col h-full ${
-                plan.featured
-                  ? "border-2 border-violet-400 shadow-xl bg-white"
-                  : "border border-slate-200 bg-white shadow-sm"
-              }`}
+              className="relative"
             >
               {plan.badge && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="bg-violet-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+                  <span className="bg-[#00D4A0] text-[#050914] text-[10px] font-bold px-3 py-1 rounded-full shadow-lg shadow-[#00D4A0]/20">
                     {plan.badge}
                   </span>
                 </div>
               )}
 
-              <div className="mb-4">
-                <h3 className="text-xl font-bold text-slate-900 mb-1">{plan.name}</h3>
-                <p className="text-sm text-slate-500">{plan.tagline}</p>
-              </div>
+              <div
+                className={`rounded-2xl p-[1px] h-full ${
+                  plan.featured
+                    ? "bg-gradient-to-b from-[#00D4A0]/40 via-[#00D4A0]/10 to-transparent"
+                    : "bg-gradient-to-b from-white/[0.08] to-transparent"
+                }`}
+              >
+                <div className={`rounded-2xl p-6 h-full flex flex-col ${plan.featured ? "bg-[#0a1628]" : "bg-[#0a1020]"}`}>
+                  <h3 className="text-lg font-bold text-white mb-1">{plan.name}</h3>
+                  <p className="text-xs text-white/30 mb-6">{plan.desc}</p>
 
-              <ul className="space-y-2.5 mb-8 flex-1">
-                {plan.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2.5 text-sm text-slate-700">
-                    <span className="w-5 h-5 rounded-full bg-slate-900 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
-                        <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
+                  {/* Price */}
+                  <div className="mb-6">
+                    {plan.price ? (
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-xs text-white/30">{plan.priceNote}</span>
+                        <span className="text-4xl font-black text-white">{plan.price} €</span>
+                        <span className="text-xs text-white/30">/ Monat</span>
+                      </div>
+                    ) : (
+                      <span className="text-4xl font-black text-white">Auf Anfrage</span>
+                    )}
+                  </div>
 
-              <div className="mt-auto">
-                <p className="text-3xl font-bold text-slate-900">{plan.priceLabel}</p>
-                <p className="text-sm text-slate-500 mb-4">{plan.period}</p>
-                <button
-                  className={`w-full py-3 rounded-full font-semibold transition-colors ${
-                    plan.featured
-                      ? "bg-slate-900 text-white hover:bg-slate-700"
-                      : "border border-slate-300 text-slate-700 hover:bg-slate-50"
-                  }`}
-                >
-                  Demo anfragen
-                </button>
+                  {/* Features */}
+                  <ul className="space-y-3 mb-8 flex-1">
+                    {plan.features.map((f) => (
+                      <li key={f} className="flex items-start gap-3 text-sm text-white/50">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="flex-shrink-0 mt-0.5">
+                          <circle cx="8" cy="8" r="7" stroke={plan.featured ? "#00D4A0" : "rgba(255,255,255,0.15)"} strokeWidth="1.5" />
+                          <path d="M5 8l2 2 4-4" stroke={plan.featured ? "#00D4A0" : "rgba(255,255,255,0.3)"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <a
+                    href="#kontakt"
+                    className={`block text-center text-sm font-bold py-3.5 rounded-xl transition-all ${
+                      plan.featured
+                        ? "btn-teal"
+                        : "border border-white/10 text-white/70 hover:border-white/25 hover:text-white"
+                    }`}
+                  >
+                    Demo anfragen
+                  </a>
+                </div>
               </div>
             </motion.div>
           ))}
