@@ -4,22 +4,22 @@ import { useRef } from "react";
 
 const testimonials = [
   {
-    quote: "Früher war das Chaos pur – Anrufe, Rückrufe, Angebote, genervte Kunden. Jetzt wird alles automatisch erfasst und sortiert. Wir sparen jeden Tag richtig viel Zeit.",
+    quote: "Früher war das Chaos pur — Anrufe, Rückrufe, Angebote, genervte Kunden. Jetzt wird alles automatisch erfasst und sortiert. Wir sparen jeden Tag richtig viel Zeit.",
     name: "AT Energiekonzepte",
     role: "Vertrieb, 2 Mitarbeiter",
-    gradient: "from-[#00D4A0]/20 via-transparent to-transparent",
+    accent: "#00D4A0",
   },
   {
     quote: "Ich war am Anfang echt skeptisch. Heute gehen keine Anrufe mehr verloren und ich hab endlich wieder den Kopf frei für meine eigentliche Arbeit.",
     name: "Ralph E.",
     role: "SHK-Betrieb, 7 Mitarbeiter",
-    gradient: "from-[#7C3AED]/20 via-transparent to-transparent",
+    accent: "#7C3AED",
   },
   {
     quote: "Heute geht kein Anruf von Patienten mehr verloren und mein Team hat endlich wieder mehr Zeit für die wichtigen Dinge im Praxisalltag.",
     name: "Dr. Heinz R.",
     role: "Augenarztpraxis, 5 Mitarbeiter",
-    gradient: "from-[#f59e0b]/20 via-transparent to-transparent",
+    accent: "#f97316",
   },
 ];
 
@@ -28,20 +28,20 @@ export default function TestimonialsSection() {
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="relative py-28 px-4" ref={ref}>
+    <section className="relative py-32 px-4 overflow-hidden" ref={ref}>
       <div className="divider" />
+      <div className="orb orb-purple w-[600px] h-[600px] right-0 top-1/2 -translate-y-1/2" />
 
       <div className="relative z-10 max-w-6xl mx-auto pt-20">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7 }}
+          className="text-center mb-20"
         >
-          <span className="section-label mb-4">Kundenstimmen</span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mt-5 mb-5">
-            Das sagen unsere{" "}
-            <span className="text-gradient">Kunden</span>
+          <span className="section-label mb-5 inline-block">Stimmen</span>
+          <h2 className="text-[clamp(36px,6vw,72px)] font-black leading-[0.9] mt-5 mb-5">
+            Das sagen<br />
+            <span className="text-gradient">unsere Kunden.</span>
           </h2>
         </motion.div>
 
@@ -49,41 +49,34 @@ export default function TestimonialsSection() {
           {testimonials.map((t, i) => (
             <motion.div
               key={t.name}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: i * 0.12, duration: 0.5 }}
-              className="relative group"
+              initial={{ opacity: 0, y: 60, rotate: i % 2 === 0 ? -2 : 2 }}
+              animate={inView ? { opacity: 1, y: 0, rotate: 0 } : {}}
+              transition={{ duration: 0.8, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="glass-card rounded-2xl p-6 cursor-none"
             >
-              {/* Gradient border effect */}
-              <div className="card-hover rounded-2xl p-[1px] bg-gradient-to-b from-white/[0.08] to-transparent">
-                <div className={`rounded-2xl p-6 bg-[#0a1020] h-full relative overflow-hidden`}>
-                  {/* Background gradient */}
-                  <div className={`absolute top-0 left-0 w-full h-32 bg-gradient-to-b ${t.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+              {/* Accent line */}
+              <div className="h-[2px] w-12 rounded-full mb-5" style={{ background: t.accent, boxShadow: `0 0 12px ${t.accent}` }} />
 
-                  <div className="relative z-10">
-                    {/* Stars */}
-                    <div className="flex gap-1 mb-5">
-                      {[1, 2, 3, 4, 5].map((s) => (
-                        <svg key={s} width="16" height="16" viewBox="0 0 16 16" fill="#fbbf24">
-                          <path d="M8 1l2 4.5H15L11.5 8l1.5 5L8 10 3 13l1.5-5L1 5.5h5z" />
-                        </svg>
-                      ))}
-                    </div>
+              {/* Stars */}
+              <div className="flex gap-1 mb-5">
+                {[1,2,3,4,5].map(s=>(
+                  <svg key={s} width="14" height="14" viewBox="0 0 16 16" fill="#fbbf24">
+                    <path d="M8 1l2 4.5H15L11.5 8l1.5 5L8 10 3 13l1.5-5L1 5.5h5z"/>
+                  </svg>
+                ))}
+              </div>
 
-                    <p className="text-sm text-white/50 leading-relaxed mb-6">
-                      &ldquo;{t.quote}&rdquo;
-                    </p>
+              <p className="text-sm text-white/45 leading-relaxed mb-6">&ldquo;{t.quote}&rdquo;</p>
 
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center">
-                        <span className="text-sm font-bold text-white/60">{t.name[0]}</span>
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-white">{t.name}</p>
-                        <p className="text-xs text-white/30">{t.role}</p>
-                      </div>
-                    </div>
-                  </div>
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm"
+                  style={{ background: `${t.accent}18`, border: `1px solid ${t.accent}30`, color: t.accent }}>
+                  {t.name[0]}
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-white">{t.name}</p>
+                  <p className="text-[11px] text-white/25">{t.role}</p>
                 </div>
               </div>
             </motion.div>

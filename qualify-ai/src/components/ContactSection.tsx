@@ -1,85 +1,67 @@
 "use client";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import MagneticButton from "./MagneticButton";
 
 export default function ContactSection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="kontakt" className="relative py-28 px-4" ref={ref}>
+    <section id="kontakt" className="relative py-32 px-4 overflow-hidden" ref={ref}>
       <div className="divider" />
-      <div className="orb-teal left-1/4 top-1/2" />
-      <div className="orb-purple right-1/4 top-1/3" />
+      <div className="orb orb-teal w-[500px] h-[500px] left-1/4 top-0" />
+      <div className="orb orb-purple w-[400px] h-[400px] right-1/4 bottom-0" />
 
       <div className="relative z-10 max-w-2xl mx-auto pt-20">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7 }}
           className="text-center mb-12"
         >
-          <span className="section-label mb-4">Loslegen</span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mt-5 mb-5">
-            Bereit für deinen{" "}
-            <span className="text-gradient">KI-Assistenten?</span>
+          <span className="section-label mb-5 inline-block">Loslegen</span>
+          <h2 className="text-[clamp(36px,6vw,72px)] font-black leading-[0.9] mt-5 mb-5">
+            Bereit für<br />
+            <span className="text-gradient">0 verpasste Anrufe?</span>
           </h2>
-          <p className="text-white/35 text-base">
-            In 15 Minuten zeigen wir dir live, was dein Assistent für deinen Betrieb leisten kann.
+          <p className="text-white/30 text-base">
+            15-Minuten Demo — wir zeigen live, was dein KI-Assistent für deinen Betrieb leistet.
           </p>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          initial={{ opacity: 0, y: 40 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="rounded-2xl p-[1px] bg-gradient-to-b from-white/[0.08] to-transparent">
-            <div className="rounded-2xl p-8 bg-[#0a1020]">
+          <div className="rounded-2xl p-[1px] bg-gradient-to-b from-[#00D4A0]/20 via-white/5 to-transparent">
+            <div className="rounded-2xl p-8 bg-[#060d18]">
               <div className="grid md:grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label className="block text-xs font-semibold text-white/30 uppercase tracking-wider mb-2">Name</label>
-                  <input
-                    type="text"
-                    placeholder="Max Mustermann"
-                    className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-white/15 focus:outline-none focus:border-[#00D4A0]/40 focus:shadow-[0_0_20px_rgba(0,212,160,0.1)] transition-all"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-white/30 uppercase tracking-wider mb-2">Unternehmen</label>
-                  <input
-                    type="text"
-                    placeholder="Musterfirma GmbH"
-                    className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-white/15 focus:outline-none focus:border-[#00D4A0]/40 focus:shadow-[0_0_20px_rgba(0,212,160,0.1)] transition-all"
-                  />
-                </div>
+                {[["Name","Max Mustermann"],["Unternehmen","Musterfirma GmbH"]].map(([label, ph]) => (
+                  <div key={label}>
+                    <label className="block text-[10px] font-bold text-white/20 uppercase tracking-widest mb-2">{label}</label>
+                    <input type="text" placeholder={ph}
+                      className="w-full bg-white/[0.03] border border-white/[0.07] rounded-xl px-4 py-3 text-sm text-white placeholder-white/10 focus:outline-none focus:border-[#00D4A0]/40 focus:shadow-[0_0_20px_rgba(0,212,160,0.08)] transition-all cursor-none" />
+                  </div>
+                ))}
               </div>
               <div className="mb-4">
-                <label className="block text-xs font-semibold text-white/30 uppercase tracking-wider mb-2">E-Mail</label>
-                <input
-                  type="email"
-                  placeholder="max@musterfirma.de"
-                  className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white placeholder-white/15 focus:outline-none focus:border-[#00D4A0]/40 focus:shadow-[0_0_20px_rgba(0,212,160,0.1)] transition-all"
-                />
+                <label className="block text-[10px] font-bold text-white/20 uppercase tracking-widest mb-2">E-Mail</label>
+                <input type="email" placeholder="max@firma.de"
+                  className="w-full bg-white/[0.03] border border-white/[0.07] rounded-xl px-4 py-3 text-sm text-white placeholder-white/10 focus:outline-none focus:border-[#00D4A0]/40 focus:shadow-[0_0_20px_rgba(0,212,160,0.08)] transition-all cursor-none" />
               </div>
               <div className="mb-6">
-                <label className="block text-xs font-semibold text-white/30 uppercase tracking-wider mb-2">Branche</label>
-                <select className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white/50 focus:outline-none focus:border-[#00D4A0]/40 transition-all appearance-none">
+                <label className="block text-[10px] font-bold text-white/20 uppercase tracking-widest mb-2">Branche</label>
+                <select className="w-full bg-white/[0.03] border border-white/[0.07] rounded-xl px-4 py-3 text-sm text-white/40 focus:outline-none focus:border-[#00D4A0]/40 transition-all appearance-none cursor-none">
                   <option value="">Branche auswählen</option>
-                  <option>Handwerk</option>
-                  <option>Arztpraxis / Gesundheit</option>
-                  <option>Immobilien</option>
-                  <option>Vertrieb / Energievertrieb</option>
-                  <option>Versicherung</option>
-                  <option>Andere</option>
+                  <option>Handwerk</option><option>Arztpraxis / Gesundheit</option>
+                  <option>Immobilien</option><option>Vertrieb / Energievertrieb</option>
+                  <option>Versicherung</option><option>Andere</option>
                 </select>
               </div>
-              <button className="btn-teal w-full py-4 text-base rounded-xl">
-                Kostenlose Demo starten →
-              </button>
-              <p className="text-center text-[10px] text-white/15 mt-4">
-                Unverbindlich & kostenlos. Innerhalb von 24h melden wir uns.
-              </p>
+              <MagneticButton className="btn-teal w-full py-4 text-base rounded-xl text-center" strength={0.2}>
+                Kostenlose Demo anfragen →
+              </MagneticButton>
+              <p className="text-center text-[10px] text-white/10 mt-4">Unverbindlich · kostenlos · Rückmeldung innerhalb 24h</p>
             </div>
           </div>
         </motion.div>

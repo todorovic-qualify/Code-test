@@ -1,54 +1,34 @@
 "use client";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import MagneticButton from "./MagneticButton";
 
 const plans = [
   {
     name: "Starter",
-    desc: "Für Betriebe, die keine Anrufe mehr verpassen wollen",
+    desc: "Kein Anruf mehr verpassen",
     price: "99",
-    priceNote: "Ab",
-    featured: false,
-    features: [
-      "Anrufe automatisch annehmen",
-      "24/7 erreichbar",
-      "Einfache Vorqualifizierung",
-      "Relevante Anfragen filtern",
-      "Automatische Terminbuchung",
-    ],
+    accent: "rgba(255,255,255,0.08)",
+    glowColor: "rgba(255,255,255,0.03)",
+    features: ["Anrufe automatisch annehmen","24/7 erreichbar","Einfache Vorqualifizierung","Relevante Anfragen filtern","Automatische Terminbuchung"],
   },
   {
     name: "Professional",
-    desc: "Für Betriebe, die wachsen wollen — ohne mehr Chaos",
+    desc: "Wachsen ohne Chaos",
     price: "149",
-    priceNote: "Ab",
+    accent: "rgba(0,212,160,0.25)",
+    glowColor: "rgba(0,212,160,0.06)",
     featured: true,
-    badge: "Beliebteste Wahl",
-    features: [
-      "Alles aus Starter +",
-      "Kontaktpunkt-Sequenzen",
-      "Intelligente Follow-Up Sequenzen",
-      "Automatische Terminvereinbarung",
-      "Priorisiert wichtige Anfragen",
-      "Weniger Unterbrechungen",
-      "Automatische Info-Meldungen",
-    ],
+    badge: "Empfohlen",
+    features: ["Alles aus Starter","Kontaktpunkt-Sequenzen","Intelligente Follow-Ups","Automatische Terminvereinbarung","Weniger Unterbrechungen","Automatische Info-Meldungen","Priorisiert wichtige Anfragen"],
   },
   {
     name: "Enterprise",
-    desc: "Für Betriebe, die maximale Zeitersparnis wollen",
+    desc: "Maximale Zeitersparnis",
     price: null,
-    priceNote: "",
-    featured: false,
-    features: [
-      "Alles aus Professional +",
-      "Persönlicher digitaler Assistent",
-      "Angebotserstellung automatisiert",
-      "Rechnungserstellung automatisiert",
-      "E-Mail-Kommunikation übernommen",
-      "Multi-Channel (E-Mail, SMS, WhatsApp)",
-      "Individuelle Automatisierungen",
-    ],
+    accent: "rgba(124,58,237,0.2)",
+    glowColor: "rgba(124,58,237,0.04)",
+    features: ["Alles aus Professional","Persönlicher Assistent","Angebotserstellung","Rechnungserstellung","E-Mail-Kommunikation","Multi-Channel (SMS, WhatsApp)","Individuelle Automatisierungen"],
   },
 ];
 
@@ -57,91 +37,75 @@ export default function PricingSection() {
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="preise" className="relative py-28 px-4" ref={ref}>
+    <section id="preise" className="relative py-32 px-4 overflow-hidden" ref={ref}>
       <div className="divider" />
-      <div className="orb-purple right-0 top-1/3" />
+      <div className="orb orb-teal w-[400px] h-[400px] left-0 top-1/3" />
 
       <div className="relative z-10 max-w-6xl mx-auto pt-20">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7 }}
+          className="text-center mb-20"
         >
-          <span className="section-label mb-4">Preise</span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mt-5 mb-5">
-            Wähle deinen{" "}
-            <span className="text-gradient">Plan</span>
+          <span className="section-label mb-5 inline-block">Preise</span>
+          <h2 className="text-[clamp(36px,6vw,72px)] font-black leading-[0.9] mt-5 mb-5">
+            Starte noch<br />
+            <span className="text-gradient">heute.</span>
           </h2>
-          <p className="text-white/35 max-w-lg mx-auto text-base">
-            Drei Stufen — passend zu deinem Betrieb. Starte klein, skaliere groß.
-          </p>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-4 items-start">
           {plans.map((plan, i) => (
             <motion.div
               key={plan.name}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 50 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: i * 0.12, duration: 0.5 }}
+              transition={{ duration: 0.7, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
               className="relative"
             >
               {plan.badge && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-                  <span className="bg-[#00D4A0] text-[#050914] text-[10px] font-bold px-3 py-1 rounded-full shadow-lg shadow-[#00D4A0]/20">
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10">
+                  <span className="text-[10px] font-bold text-black bg-[#00D4A0] px-3 py-1 rounded-full shadow-lg shadow-[#00D4A0]/30">
                     {plan.badge}
                   </span>
                 </div>
               )}
 
-              <div
-                className={`rounded-2xl p-[1px] h-full ${
-                  plan.featured
-                    ? "bg-gradient-to-b from-[#00D4A0]/40 via-[#00D4A0]/10 to-transparent"
-                    : "bg-gradient-to-b from-white/[0.08] to-transparent"
-                }`}
-              >
-                <div className={`rounded-2xl p-6 h-full flex flex-col ${plan.featured ? "bg-[#0a1628]" : "bg-[#0a1020]"}`}>
-                  <h3 className="text-lg font-bold text-white mb-1">{plan.name}</h3>
-                  <p className="text-xs text-white/30 mb-6">{plan.desc}</p>
+              <div className="rounded-2xl p-[1px]" style={{
+                background: `linear-gradient(145deg, ${plan.accent}, transparent)`,
+                boxShadow: `0 0 60px ${plan.glowColor}`,
+              }}>
+                <div className="rounded-2xl p-6 flex flex-col h-full" style={{ background: "#080e1a" }}>
+                  <h3 className="text-lg font-black text-white mb-1">{plan.name}</h3>
+                  <p className="text-xs text-white/25 mb-6">{plan.desc}</p>
 
-                  {/* Price */}
-                  <div className="mb-6">
-                    {plan.price ? (
-                      <div className="flex items-baseline gap-1">
-                        <span className="text-xs text-white/30">{plan.priceNote}</span>
-                        <span className="text-4xl font-black text-white">{plan.price} €</span>
-                        <span className="text-xs text-white/30">/ Monat</span>
-                      </div>
-                    ) : (
-                      <span className="text-4xl font-black text-white">Auf Anfrage</span>
-                    )}
+                  <div className="mb-7">
+                    {plan.price
+                      ? <div className="flex items-baseline gap-1"><span className="text-xs text-white/25">Ab</span><span className="text-5xl font-black text-white">{plan.price}</span><span className="text-sm text-white/30"> € / Mo.</span></div>
+                      : <span className="text-3xl font-black text-white">Auf Anfrage</span>
+                    }
                   </div>
 
-                  {/* Features */}
                   <ul className="space-y-3 mb-8 flex-1">
-                    {plan.features.map((f) => (
-                      <li key={f} className="flex items-start gap-3 text-sm text-white/50">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="flex-shrink-0 mt-0.5">
-                          <circle cx="8" cy="8" r="7" stroke={plan.featured ? "#00D4A0" : "rgba(255,255,255,0.15)"} strokeWidth="1.5" />
-                          <path d="M5 8l2 2 4-4" stroke={plan.featured ? "#00D4A0" : "rgba(255,255,255,0.3)"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    {plan.features.map(f => (
+                      <li key={f} className="flex items-start gap-2.5 text-sm text-white/40">
+                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" className="flex-shrink-0 mt-0.5" style={{ color: plan.featured ? "#00D4A0" : "rgba(255,255,255,0.25)" }}>
+                          <circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" strokeWidth="1.2"/>
+                          <path d="M4.5 7.5l2 2 4-4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                         {f}
                       </li>
                     ))}
                   </ul>
 
-                  <a
+                  <MagneticButton
                     href="#kontakt"
-                    className={`block text-center text-sm font-bold py-3.5 rounded-xl transition-all ${
-                      plan.featured
-                        ? "btn-teal"
-                        : "border border-white/10 text-white/70 hover:border-white/25 hover:text-white"
+                    className={`block text-center text-sm font-bold py-3.5 rounded-xl w-full transition-all ${
+                      plan.featured ? "btn-teal" : "border border-white/10 text-white/50 hover:text-white hover:border-white/25"
                     }`}
                   >
                     Demo anfragen
-                  </a>
+                  </MagneticButton>
                 </div>
               </div>
             </motion.div>
