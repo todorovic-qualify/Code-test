@@ -4,11 +4,12 @@ import { useRef, ReactNode } from "react";
 interface Props {
   children: ReactNode;
   className?: string;
+  style?: React.CSSProperties;
   href?: string;
   strength?: number;
 }
 
-export default function MagneticButton({ children, className = "", href, strength = 0.35 }: Props) {
+export default function MagneticButton({ children, className = "", style: customStyle, href, strength = 0.35 }: Props) {
   const ref = useRef<HTMLAnchorElement & HTMLButtonElement>(null);
 
   const onMove = (e: React.MouseEvent) => {
@@ -26,17 +27,17 @@ export default function MagneticButton({ children, className = "", href, strengt
     if (ref.current) ref.current.style.transform = "translate(0,0)";
   };
 
-  const style = { transition: "transform 0.3s cubic-bezier(0.23,1,0.32,1)" };
+  const motionStyle = { transition: "transform 0.3s cubic-bezier(0.23,1,0.32,1)", ...customStyle };
 
   if (href) {
     return (
-      <a ref={ref} href={href} className={className} style={style} onMouseMove={onMove} onMouseLeave={onLeave}>
+      <a ref={ref} href={href} className={className} style={motionStyle} onMouseMove={onMove} onMouseLeave={onLeave}>
         {children}
       </a>
     );
   }
   return (
-    <button ref={ref} className={className} style={style} onMouseMove={onMove} onMouseLeave={onLeave}>
+    <button ref={ref} className={className} style={motionStyle} onMouseMove={onMove} onMouseLeave={onLeave}>
       {children}
     </button>
   );
