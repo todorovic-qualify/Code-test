@@ -217,6 +217,70 @@ body::after {
 .scroll-x { overflow-x: auto; scrollbar-width: none; }
 .scroll-x::-webkit-scrollbar { display: none; }
 
+/* ─── Glass strong (mobile nav) ──────────────────── */
+.glass-strong {
+  background: rgba(6, 12, 28, 0.92);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(24px);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+}
+
+/* ─── Hero: breathing center orb ─────────────────── */
+@keyframes hero-breathe {
+  0%, 100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
+  50%       { opacity: 1;   transform: translate(-50%, -50%) scale(1.18); }
+}
+.hero-breathe-orb {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  width: 1000px;
+  height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0,212,160,0.055) 0%, rgba(0,195,240,0.03) 40%, transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+  animation: hero-breathe 9s ease-in-out infinite;
+}
+
+/* ─── Hero: waveform bars ─────────────────────────── */
+@keyframes hero-wave {
+  0%, 100% { transform: scaleY(0.3); opacity: 0.38; }
+  50%       { transform: scaleY(1);   opacity: 0.9;  }
+}
+.hero-wave-bar {
+  width: 2px;
+  min-width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(to top, rgba(0,212,160,0.15), rgba(0,212,160,0.75));
+  transform-origin: bottom;
+  animation: hero-wave 1.15s ease-in-out infinite;
+}
+
+/* ─── Hero: chart bars (subtle breathing) ────────── */
+@keyframes hero-bar-glow {
+  0%, 100% { opacity: 0.55; }
+  50%       { opacity: 0.9;  }
+}
+.hero-chart-bar {
+  border-radius: 2px;
+  animation: hero-bar-glow 2.4s ease-in-out infinite;
+}
+
+/* ─── Hero: play button circle ───────────────────── */
+.hero-play-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0,212,160,0.1);
+  border: 1px solid rgba(0,212,160,0.22);
+  color: #00D4A0;
+  flex-shrink: 0;
+}
+
 /* ─── Reduced motion ──────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
