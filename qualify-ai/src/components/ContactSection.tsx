@@ -1,6 +1,6 @@
 "use client";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import MagneticButton from "./MagneticButton";
 
 const trustPoints = [
@@ -42,12 +42,58 @@ const miniTestimonial = {
   quote: "Die Demo hat uns in 15 Minuten überzeugt. Woche 1: 8 neue Termine.",
   name: "Ralph E.",
   role: "SHK-Betrieb",
-  accent: "#00D4A0",
 };
+
+const INITIAL = { name: "", company: "", email: "", industry: "" };
 
 export default function ContactSection() {
   const ref    = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+
+  const [fields,  setFields]  = useState(INITIAL);
+  const [status,  setStatus]  = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errMsg,  setErrMsg]  = useState("");
+
+  const set = (k: keyof typeof INITIAL) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
+    setFields(f => ({ ...f, [k]: e.target.value }));
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!fields.name || !fields.email) return;
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(fields),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Fehler");
+      }
+      setStatus("success");
+      setFields(INITIAL);
+    } catch (err: unknown) {
+      setErrMsg(err instanceof Error ? err.message : "Senden fehlgeschlagen.");
+      setStatus("error");
+    }
+  };
+
+  const inputStyle: React.CSSProperties = {
+    background: "rgba(255,255,255,0.03)",
+    border: "1px solid rgba(255,255,255,0.07)",
+    outline: "none",
+    color: "#f1f5f9",
+  };
+
+  const focusIn  = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
+    e.target.style.border     = "1px solid rgba(0,212,160,0.35)";
+    e.target.style.boxShadow  = "0 0 20px rgba(0,212,160,0.08)";
+  };
+  const focusOut = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
+    e.target.style.border     = "1px solid rgba(255,255,255,0.07)";
+    e.target.style.boxShadow  = "none";
+  };
 
   return (
     <section
@@ -87,7 +133,7 @@ export default function ContactSection() {
           </p>
         </motion.div>
 
-        {/* Two-column layout: form + trust */}
+        {/* Two-column layout */}
         <div className="grid lg:grid-cols-[1fr_420px] gap-8 items-start">
 
           {/* LEFT: Trust + mini testimonial */}
@@ -97,7 +143,6 @@ export default function ContactSection() {
             transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-col gap-8 lg:pr-8"
           >
-            {/* Trust points */}
             <div className="space-y-6">
               {trustPoints.map((tp, i) => (
                 <motion.div
@@ -119,16 +164,12 @@ export default function ContactSection() {
               ))}
             </div>
 
-            {/* Mini testimonial quote */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.55 }}
-              className="rounded-xl p-5 relative overflow-hidden"
-              style={{
-                background: "rgba(0,212,160,0.04)",
-                border: "1px solid rgba(0,212,160,0.12)",
-              }}
+              className="rounded-xl p-5"
+              style={{ background: "rgba(0,212,160,0.04)", border: "1px solid rgba(0,212,160,0.12)" }}
             >
               <div className="w-6 h-[2px] rounded-full mb-3" style={{ background: "#00D4A0" }} />
               <p className="text-sm italic leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.55)" }}>
@@ -147,7 +188,7 @@ export default function ContactSection() {
             </motion.div>
           </motion.div>
 
-          {/* RIGHT: The form */}
+          {/* RIGHT: Form */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -159,73 +200,150 @@ export default function ContactSection() {
             >
               <div className="rounded-[calc(1rem-1px)] p-7" style={{ background: "#060d18" }}>
 
-                <p className="text-sm font-bold text-white mb-6">Demo vereinbaren</p>
-
-                <div className="space-y-4 mb-5">
-                  {[
-                    { label: "Name",        placeholder: "Max Mustermann",  type: "text"  },
-                    { label: "Unternehmen", placeholder: "Musterfirma GmbH", type: "text" },
-                    { label: "E-Mail",      placeholder: "max@firma.de",    type: "email" },
-                  ].map(({ label, placeholder, type }) => (
-                    <div key={label}>
-                      <label className="block text-[10px] font-bold uppercase tracking-widest mb-2"
-                        style={{ color: "rgba(255,255,255,0.2)" }}>
-                        {label}
-                      </label>
-                      <input
-                        type={type}
-                        placeholder={placeholder}
-                        className="w-full rounded-xl px-4 py-3 text-sm text-white transition-all cursor-none"
-                        style={{
-                          background: "rgba(255,255,255,0.03)",
-                          border: "1px solid rgba(255,255,255,0.07)",
-                          outline: "none",
-                          color: "#f1f5f9",
-                        }}
-                        onFocus={e => {
-                          e.target.style.border = "1px solid rgba(0,212,160,0.35)";
-                          e.target.style.boxShadow = "0 0 20px rgba(0,212,160,0.08)";
-                        }}
-                        onBlur={e => {
-                          e.target.style.border = "1px solid rgba(255,255,255,0.07)";
-                          e.target.style.boxShadow = "none";
-                        }}
-                      />
+                {/* ── Success state ── */}
+                {status === "success" ? (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.92 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    className="flex flex-col items-center text-center py-8 gap-4"
+                  >
+                    <div className="w-14 h-14 rounded-full flex items-center justify-center"
+                      style={{ background: "rgba(0,212,160,0.12)", border: "1px solid rgba(0,212,160,0.3)" }}>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00D4A0" strokeWidth="2" strokeLinecap="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
                     </div>
-                  ))}
-
-                  <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-widest mb-2"
-                      style={{ color: "rgba(255,255,255,0.2)" }}>
-                      Branche
-                    </label>
-                    <select
-                      className="w-full rounded-xl px-4 py-3 text-sm transition-all appearance-none cursor-none"
-                      style={{
-                        background: "rgba(255,255,255,0.03)",
-                        border: "1px solid rgba(255,255,255,0.07)",
-                        color: "rgba(255,255,255,0.4)",
-                        outline: "none",
-                      }}
+                    <div>
+                      <p className="text-base font-bold text-white mb-2">Anfrage gesendet!</p>
+                      <p className="text-sm" style={{ color: "rgba(255,255,255,0.38)" }}>
+                        Wir melden uns innerhalb von 2 Stunden bei dir.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setStatus("idle")}
+                      className="text-xs mt-2 underline"
+                      style={{ color: "rgba(255,255,255,0.28)" }}
                     >
-                      <option value="">Branche auswählen</option>
-                      <option>Handwerk</option>
-                      <option>Arztpraxis / Gesundheit</option>
-                      <option>Immobilien</option>
-                      <option>Vertrieb / Energievertrieb</option>
-                      <option>Versicherung</option>
-                      <option>Andere</option>
-                    </select>
-                  </div>
-                </div>
+                      Neue Anfrage
+                    </button>
+                  </motion.div>
+                ) : (
+                  /* ── Form ── */
+                  <form onSubmit={handleSubmit} noValidate>
+                    <p className="text-sm font-bold text-white mb-6">Demo vereinbaren</p>
 
-                <MagneticButton className="btn-teal w-full py-4 text-base rounded-xl text-center" strength={0.2}>
-                  Kostenlose Demo anfragen →
-                </MagneticButton>
+                    <div className="space-y-4 mb-5">
+                      {/* Name */}
+                      <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-widest mb-2"
+                          style={{ color: "rgba(255,255,255,0.2)" }}>
+                          Name <span style={{ color: "#00D4A0" }}>*</span>
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="Max Mustermann"
+                          value={fields.name}
+                          onChange={set("name")}
+                          onFocus={focusIn}
+                          onBlur={focusOut}
+                          className="w-full rounded-xl px-4 py-3 text-sm transition-all cursor-none"
+                          style={inputStyle}
+                        />
+                      </div>
 
-                <p className="text-center text-[10px] mt-4" style={{ color: "rgba(255,255,255,0.18)" }}>
-                  Unverbindlich · Kündigung jederzeit · Antwort in &lt; 2h
-                </p>
+                      {/* Unternehmen */}
+                      <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-widest mb-2"
+                          style={{ color: "rgba(255,255,255,0.2)" }}>
+                          Unternehmen
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Musterfirma GmbH"
+                          value={fields.company}
+                          onChange={set("company")}
+                          onFocus={focusIn}
+                          onBlur={focusOut}
+                          className="w-full rounded-xl px-4 py-3 text-sm transition-all cursor-none"
+                          style={inputStyle}
+                        />
+                      </div>
+
+                      {/* E-Mail */}
+                      <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-widest mb-2"
+                          style={{ color: "rgba(255,255,255,0.2)" }}>
+                          E-Mail <span style={{ color: "#00D4A0" }}>*</span>
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          placeholder="max@firma.de"
+                          value={fields.email}
+                          onChange={set("email")}
+                          onFocus={focusIn}
+                          onBlur={focusOut}
+                          className="w-full rounded-xl px-4 py-3 text-sm transition-all cursor-none"
+                          style={inputStyle}
+                        />
+                      </div>
+
+                      {/* Branche */}
+                      <div>
+                        <label className="block text-[10px] font-bold uppercase tracking-widest mb-2"
+                          style={{ color: "rgba(255,255,255,0.2)" }}>
+                          Branche
+                        </label>
+                        <select
+                          value={fields.industry}
+                          onChange={set("industry")}
+                          onFocus={focusIn}
+                          onBlur={focusOut}
+                          className="w-full rounded-xl px-4 py-3 text-sm transition-all appearance-none cursor-none"
+                          style={{ ...inputStyle, color: fields.industry ? "#f1f5f9" : "rgba(255,255,255,0.4)" }}
+                        >
+                          <option value="">Branche auswählen</option>
+                          <option>Handwerk</option>
+                          <option>Arztpraxis / Gesundheit</option>
+                          <option>Immobilien</option>
+                          <option>Vertrieb / Energievertrieb</option>
+                          <option>Versicherung</option>
+                          <option>Andere</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* Error message */}
+                    {status === "error" && (
+                      <p className="text-xs mb-4 px-3 py-2 rounded-lg"
+                        style={{ color: "#f97316", background: "rgba(249,115,22,0.08)", border: "1px solid rgba(249,115,22,0.15)" }}>
+                        {errMsg}
+                      </p>
+                    )}
+
+                    <MagneticButton
+                      className="btn-teal w-full py-4 text-base rounded-xl text-center"
+                      strength={0.2}
+                    >
+                      {status === "loading" ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <svg className="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                          </svg>
+                          Wird gesendet…
+                        </span>
+                      ) : (
+                        "Kostenlose Demo anfragen →"
+                      )}
+                    </MagneticButton>
+
+                    <p className="text-center text-[10px] mt-4" style={{ color: "rgba(255,255,255,0.18)" }}>
+                      Unverbindlich · Kündigung jederzeit · Antwort in &lt; 2h
+                    </p>
+                  </form>
+                )}
               </div>
             </div>
           </motion.div>
