@@ -1,13 +1,14 @@
 "use client";
-import { useRef, ReactNode } from "react";
+import React, { useRef, ReactNode } from "react";
 
 interface Props {
   children: ReactNode;
   className?: string;
+  style?: React.CSSProperties;
   intensity?: number;
 }
 
-export default function TiltCard({ children, className = "", intensity = 8 }: Props) {
+export default function TiltCard({ children, className = "", style: customStyle, intensity = 8 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -29,7 +30,7 @@ export default function TiltCard({ children, className = "", intensity = 8 }: Pr
       className={className}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      style={{ transition: "transform 0.15s ease", transformStyle: "preserve-3d", willChange: "transform" }}
+      style={{ transition: "transform 0.15s ease", transformStyle: "preserve-3d", willChange: "transform", ...customStyle }}
     >
       {children}
     </div>

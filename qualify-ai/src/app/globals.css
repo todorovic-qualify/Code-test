@@ -323,6 +323,76 @@ body::after {
   animation: line-draw 1s cubic-bezier(0.16,1,0.3,1) forwards;
 }
 
+/* ─── Drifting orb animations (hero background) ──── */
+@keyframes drift1 {
+  0%,100% { transform: translate(  0px,   0px) scale(1.00); }
+  25%      { transform: translate( 80px, -60px) scale(1.10); }
+  50%      { transform: translate( 30px,  85px) scale(0.93); }
+  75%      { transform: translate(-55px,  22px) scale(1.05); }
+}
+@keyframes drift2 {
+  0%,100% { transform: translate(  0px,   0px) scale(1.00); }
+  33%      { transform: translate(-65px,  58px) scale(1.08); }
+  66%      { transform: translate( 58px, -70px) scale(0.92); }
+}
+@keyframes drift3 {
+  0%,100% { transform: translate(  0px,   0px) scale(1.00); }
+  20%      { transform: translate( 60px,  38px) scale(0.96); }
+  60%      { transform: translate(-42px, -58px) scale(1.07); }
+  80%      { transform: translate( 32px,  68px) scale(1.02); }
+}
+.orb-drift-1 { animation: drift1 22s ease-in-out infinite; }
+.orb-drift-2 { animation: drift2 19s ease-in-out infinite 3s; }
+.orb-drift-3 { animation: drift3 26s ease-in-out infinite 6s; }
+
+/* ─── Scan beam (sweeps hero top → bottom) ────────── */
+@keyframes scan-sweep {
+  0%   { top: -2px;  opacity: 0;   }
+  4%   {             opacity: 1;   }
+  96%  {             opacity: 0.7; }
+  100% { top: 100%;  opacity: 0;   }
+}
+.scan-beam {
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  pointer-events: none;
+  z-index: 8;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0,212,160,0.06) 15%,
+    rgba(0,212,160,0.25) 50%,
+    rgba(0,212,160,0.06) 85%,
+    transparent 100%
+  );
+  box-shadow: 0 0 14px rgba(0,212,160,0.3), 0 0 40px rgba(0,212,160,0.1);
+  animation: scan-sweep 12s linear infinite;
+  animation-delay: 2s;
+}
+
+/* ─── Stronger glow orbs for hero ─────────────────── */
+.orb-teal-strong   { background: radial-gradient(circle, rgba(0,212,160,0.28) 0%, transparent 65%); }
+.orb-blue-strong   { background: radial-gradient(circle, rgba(0,168,243,0.22) 0%, transparent 65%); }
+.orb-purple-strong { background: radial-gradient(circle, rgba(124,58,237,0.22) 0%, transparent 65%); }
+
+/* ─── Stat bar (inline stats, editorial) ──────────── */
+.stat-bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ─── Clip-path section reveal ────────────────────── */
+@keyframes wipe-up {
+  from { clip-path: inset(100% 0 0 0); }
+  to   { clip-path: inset(0% 0 0 0);   }
+}
+.wipe-up {
+  animation: wipe-up 0.9s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+
 /* ─── Reduced motion ──────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
