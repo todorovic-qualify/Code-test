@@ -215,7 +215,7 @@ export default function Hero() {
                 href="#funktionen"
                 className="btn-outline text-sm md:text-base px-7 py-4 inline-flex items-center justify-center gap-2.5"
               >
-                <span className="hero-play-btn">
+                <span className="hero-play-btn mr-1">
                   <svg width="9" height="9" viewBox="0 0 9 9" fill="currentColor" aria-hidden>
                     <polygon points="1,0.5 8.5,4.5 1,8.5" />
                   </svg>
