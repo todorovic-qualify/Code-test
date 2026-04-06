@@ -291,9 +291,44 @@ export default function Hero() {
               </AnimatePresence>
             </motion.div>
 
-            {/* ── Dashboard card ──────────────────────── */}
-            <div
-              className="rounded-2xl bg-[#030810]/97 w-full"
+            {/* ── Dashboard card (relative wrapper for badge) ─ */}
+            <div className="relative">
+              {/* ── Floating score badge — anchored to dashboard card ─ */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                animate={inView ? { opacity: 1, scale: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: 1.3, ease: [0.16, 1, 0.3, 1] }}
+                style={{ x: floatX, y: floatY }}
+                className="absolute -bottom-5 -left-3 z-20 pointer-events-none select-none"
+              >
+                <div
+                  className="glass rounded-xl px-3.5 py-2.5 flex items-center gap-2.5 shadow-xl"
+                  style={{ border: "1px solid rgba(0,212,160,0.18)" }}
+                >
+                  <div className="relative w-9 h-9 shrink-0">
+                    <svg viewBox="0 0 36 36" className="w-9 h-9 -rotate-90">
+                      <circle cx="18" cy="18" r="14" fill="none" stroke="rgba(0,212,160,0.12)" strokeWidth="3" />
+                      <circle
+                        cx="18" cy="18" r="14"
+                        fill="none"
+                        stroke="#00D4A0"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeDasharray="87.96"
+                        strokeDashoffset="9"
+                      />
+                    </svg>
+                    <span className="absolute inset-0 flex items-center justify-center text-[9px] font-black text-[#00D4A0]">92</span>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-white leading-none mb-0.5">Lead Score</p>
+                    <p className="text-[9px] text-white/35 leading-none">Hoch qualifiziert</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <div
+                className="rounded-2xl bg-[#030810]/97 w-full"
               style={{
                 border: "1px solid rgba(0,212,160,0.11)",
                 boxShadow:
@@ -396,6 +431,8 @@ export default function Hero() {
               </div>
             </div>
 
+            </div>{/* end relative dashboard wrapper */}
+
             {/* ── AI waveform bar ──────────────────────── */}
             <div className="mt-3">
               <div
@@ -421,40 +458,6 @@ export default function Hero() {
                 <span className="text-[10px] text-white/20 font-mono shrink-0">0:42</span>
               </div>
             </div>
-
-            {/* ── Floating score badge (layer 3 parallax) ─ */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8, y: 10 }}
-              animate={inView ? { opacity: 1, scale: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 1.3, ease: [0.16, 1, 0.3, 1] }}
-              style={{ x: floatX, y: floatY }}
-              className="absolute -bottom-4 -left-3 z-20 pointer-events-none select-none"
-            >
-              <div
-                className="glass rounded-xl px-3.5 py-2.5 flex items-center gap-2.5 shadow-xl"
-                style={{ border: "1px solid rgba(0,212,160,0.18)" }}
-              >
-                <div className="relative w-9 h-9 shrink-0">
-                  <svg viewBox="0 0 36 36" className="w-9 h-9 -rotate-90">
-                    <circle cx="18" cy="18" r="14" fill="none" stroke="rgba(0,212,160,0.12)" strokeWidth="3" />
-                    <circle
-                      cx="18" cy="18" r="14"
-                      fill="none"
-                      stroke="#00D4A0"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                      strokeDasharray="87.96"
-                      strokeDashoffset="9"
-                    />
-                  </svg>
-                  <span className="absolute inset-0 flex items-center justify-center text-[9px] font-black text-[#00D4A0]">92</span>
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold text-white leading-none mb-0.5">Lead Score</p>
-                  <p className="text-[9px] text-white/35 leading-none">Hoch qualifiziert</p>
-                </div>
-              </div>
-            </motion.div>
 
             {/* Ambient bottom glow */}
             <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 w-1/2 h-20
