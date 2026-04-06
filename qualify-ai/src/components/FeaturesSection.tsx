@@ -102,8 +102,8 @@ export default function FeaturesSection() {
             transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="text-[clamp(36px,6vw,72px)] font-black leading-[0.9] mt-5 mb-5"
           >
-            Alles was dein<br />
-            <span className="text-gradient">Betrieb braucht.</span>
+            Alles was der<br />
+            <span className="text-gradient">Assistent kann.</span>
           </motion.h2>
 
           <motion.p

@@ -1,13 +1,21 @@
 "use client";
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import { useRef, useState } from "react";
 import MagneticButton from "./MagneticButton";
+
+type Period = "annual" | "6months" | "3months";
+
+const PERIODS: { key: Period; label: string; sublabel: string; badge?: string }[] = [
+  { key: "annual",   label: "Jährlich",   sublabel: "günstigster Preis", badge: "Spare bis 50%" },
+  { key: "6months",  label: "6 Monate",   sublabel: "" },
+  { key: "3months",  label: "3 Monate",   sublabel: "" },
+];
 
 const plans = [
   {
     name: "Starter",
     tagline: "Kein Anruf mehr verpassen",
-    price: "99",
+    prices: { annual: "99", "6months": "149", "3months": "199" } as Record<Period, string>,
     accent: "rgba(255,255,255,0.06)",
     glowColor: "rgba(255,255,255,0.0)",
     borderColor: "rgba(255,255,255,0.08)",
@@ -24,7 +32,7 @@ const plans = [
   {
     name: "Professional",
     tagline: "Wachsen ohne Chaos",
-    price: "149",
+    prices: { annual: "149", "6months": "199", "3months": "249" } as Record<Period, string>,
     accent: "rgba(0,212,160,0.22)",
     glowColor: "rgba(0,212,160,0.08)",
     borderColor: "rgba(0,212,160,0.3)",
@@ -45,7 +53,7 @@ const plans = [
   {
     name: "Enterprise",
     tagline: "Volle Kontrolle & maximale Effizienz",
-    price: null,
+    prices: null,
     accent: "rgba(124,58,237,0.18)",
     glowColor: "rgba(124,58,237,0.06)",
     borderColor: "rgba(124,58,237,0.25)",
@@ -71,8 +79,9 @@ const trust = [
 ];
 
 export default function PricingSection() {
-  const ref     = useRef(null);
-  const inView  = useInView(ref, { once: true, margin: "-80px" });
+  const ref    = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const [period, setPeriod] = useState<Period>("annual");
 
   return (
     <section
@@ -101,18 +110,58 @@ export default function PricingSection() {
           </h2>
         </motion.div>
 
-        {/* ROI anchor — frames the price before they see it */}
+        {/* ROI anchor */}
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.12 }}
-          className="text-center text-sm mb-16 max-w-lg mx-auto leading-relaxed"
+          className="text-center text-sm mb-10 max-w-lg mx-auto leading-relaxed"
           style={{ color: "rgba(255,255,255,0.35)" }}
         >
           Ein durchschnittlicher Betrieb gewinnt mit Qualify.ai{" "}
           <span className="font-bold" style={{ color: "#00D4A0" }}>4–6 zusätzliche Aufträge pro Monat</span>{" "}
           — die sich bereits im ersten Monat amortisieren.
         </motion.p>
+
+        {/* ── Billing period switcher ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex justify-center mb-12"
+        >
+          <div
+            className="relative flex rounded-2xl p-1 gap-1"
+            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}
+          >
+            {PERIODS.map(p => (
+              <button
+                key={p.key}
+                onClick={() => setPeriod(p.key)}
+                className="relative flex flex-col items-center px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 cursor-none min-w-[100px]"
+                style={{
+                  color: period === p.key ? "#fff" : "rgba(255,255,255,0.35)",
+                }}
+              >
+                {/* Active bg */}
+                {period === p.key && (
+                  <motion.div
+                    layoutId="period-bg"
+                    className="absolute inset-0 rounded-xl"
+                    style={{ background: "rgba(0,212,160,0.14)", border: "1px solid rgba(0,212,160,0.3)" }}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10 leading-tight">{p.label}</span>
+                {p.badge && p.key === "annual" && (
+                  <span className="relative z-10 text-[9px] font-black mt-0.5" style={{ color: "#00D4A0" }}>
+                    {p.badge}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+        </motion.div>
 
         {/* Pricing cards */}
         <div className="grid md:grid-cols-3 gap-4 items-start">
@@ -125,7 +174,7 @@ export default function PricingSection() {
               className="relative"
             >
               {/* Recommended badge */}
-              {plan.badge && (
+              {"badge" in plan && plan.badge && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
                   <span className="text-[10px] font-black text-black bg-[#00D4A0] px-3.5 py-1.5 rounded-full shadow-lg shadow-[#00D4A0]/30">
                     {plan.badge}
@@ -138,10 +187,10 @@ export default function PricingSection() {
                 className="rounded-2xl p-[1px] h-full"
                 style={{
                   background: `linear-gradient(145deg, ${plan.accent}, transparent 60%)`,
-                  boxShadow: plan.featured
+                  boxShadow: "featured" in plan && plan.featured
                     ? `0 0 0 1px ${plan.borderColor}, 0 24px 60px ${plan.glowColor}, 0 0 40px ${plan.glowColor}`
                     : `0 0 0 1px ${plan.borderColor}`,
-                  transform: plan.featured ? "scale(1.02)" : undefined,
+                  transform: "featured" in plan && plan.featured ? "scale(1.02)" : undefined,
                 }}
               >
                 <div className="rounded-[calc(1rem-1px)] p-6 flex flex-col h-full" style={{ background: "#080e1c" }}>
@@ -149,14 +198,23 @@ export default function PricingSection() {
                   <h3 className="text-lg font-black text-white mb-0.5">{plan.name}</h3>
                   <p className="text-xs mb-6" style={{ color: "rgba(255,255,255,0.28)" }}>{plan.tagline}</p>
 
-                  {/* Price */}
-                  <div className="mb-7">
-                    {plan.price ? (
-                      <div className="flex items-baseline gap-1.5">
-                        <span className="text-[10px]" style={{ color: "rgba(255,255,255,0.22)" }}>Ab</span>
-                        <span className="text-5xl font-black text-white">{plan.price}</span>
-                        <span className="text-sm" style={{ color: "rgba(255,255,255,0.28)" }}>€ / Mo.</span>
-                      </div>
+                  {/* Price — animated on period switch */}
+                  <div className="mb-7 min-h-[56px] flex items-end">
+                    {plan.prices ? (
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={period}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.22 }}
+                          className="flex items-baseline gap-1.5"
+                        >
+                          <span className="text-[10px]" style={{ color: "rgba(255,255,255,0.22)" }}>Ab</span>
+                          <span className="text-5xl font-black text-white">{plan.prices[period]}</span>
+                          <span className="text-sm" style={{ color: "rgba(255,255,255,0.28)" }}>€ / Mo.</span>
+                        </motion.div>
+                      </AnimatePresence>
                     ) : (
                       <span className="text-3xl font-black text-white">Auf Anfrage</span>
                     )}
@@ -167,7 +225,7 @@ export default function PricingSection() {
                     {plan.features.map(f => (
                       <li key={f} className="flex items-start gap-2.5 text-sm" style={{ color: "rgba(255,255,255,0.42)" }}>
                         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" className="flex-shrink-0 mt-0.5"
-                          style={{ color: plan.featured ? "#00D4A0" : plan.ctaStyle === "purple" ? "#7C3AED" : "rgba(255,255,255,0.2)" }}>
+                          style={{ color: "featured" in plan && plan.featured ? "#00D4A0" : plan.ctaStyle === "purple" ? "#7C3AED" : "rgba(255,255,255,0.2)" }}>
                           <circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" strokeWidth="1.2"/>
                           <path d="M4.5 7.5l2 2 4-4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
@@ -180,11 +238,7 @@ export default function PricingSection() {
                   <MagneticButton
                     href="#kontakt"
                     className={`block text-center text-sm font-bold py-3.5 rounded-xl w-full transition-all ${
-                      plan.ctaStyle === "primary"
-                        ? "btn-teal"
-                        : plan.ctaStyle === "purple"
-                        ? ""
-                        : ""
+                      plan.ctaStyle === "primary" ? "btn-teal" : ""
                     }`}
                     style={
                       plan.ctaStyle === "purple"
