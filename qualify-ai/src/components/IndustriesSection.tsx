@@ -264,26 +264,53 @@ export default function IndustriesSection() {
                 Vollständiger Zyklus · inkl. Follow-ups & Bewertung
               </p>
               {"highlight" in ind && ind.highlight && (
-                <p className="text-xs mb-4 px-3 py-2 rounded-lg inline-block"
+                <motion.p
+                  key={active + "hl"}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="text-xs mb-4 px-3 py-2 rounded-lg inline-block"
                   style={{ background: `${ind.color}0d`, color: ind.color, border: `1px solid ${ind.color}20` }}>
                   {ind.highlight}
-                </p>
+                </motion.p>
               )}
               <div className="flex flex-wrap items-center gap-y-3">
                 {ind.journey.map((j, ji) => (
-                  <div key={ji} className="flex items-center gap-2">
-                    <div className="flex flex-col items-center">
-                      <span className="text-[10px] font-bold" style={{ color: ji === ind.journey.length - 1 ? ind.color : "rgba(255,255,255,0.6)" }}>
+                  <motion.div
+                    key={ji}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: ji * 0.07 }}
+                    className="flex items-center gap-2"
+                  >
+                    <motion.div
+                      className="flex flex-col items-center px-2 py-1 rounded-lg cursor-default"
+                      whileHover={{ scale: 1.08, y: -2 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 18 }}
+                      style={{
+                        background: ji === ind.journey.length - 1 ? `${ind.color}14` : "transparent",
+                        border: ji === ind.journey.length - 1 ? `1px solid ${ind.color}30` : "1px solid transparent",
+                      }}
+                    >
+                      <span className="text-[10px] font-bold"
+                        style={{ color: ji === ind.journey.length - 1 ? ind.color : "rgba(255,255,255,0.65)" }}>
                         {j.step}
                       </span>
                       <span className="text-[9px]" style={{ color: "rgba(255,255,255,0.2)" }}>{j.detail}</span>
-                    </div>
+                    </motion.div>
                     {ji < ind.journey.length - 1 && (
-                      <svg className="shrink-0 mx-1" width="14" height="8" viewBox="0 0 14 8" fill="none">
-                        <path d="M0 4h12M9 1l3 3-3 3" stroke={ind.color} strokeOpacity="0.3" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
+                      <div className="relative shrink-0 mx-0.5 overflow-hidden" style={{ width: 20, height: 8 }}>
+                        <svg width="20" height="8" viewBox="0 0 20 8" fill="none">
+                          <path d="M0 4h16M13 1l4 3-4 3" stroke={ind.color} strokeOpacity="0.25" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <motion.div
+                          className="absolute top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full"
+                          style={{ background: ind.color, boxShadow: `0 0 6px ${ind.color}`, left: 0 }}
+                          animate={{ x: [0, 18], opacity: [0, 1, 0] }}
+                          transition={{ duration: 1.2, delay: ji * 0.2, repeat: Infinity, ease: "linear" }}
+                        />
+                      </div>
                     )}
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
