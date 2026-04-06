@@ -13,8 +13,15 @@ const industries = [
     name: "Handwerker",
     stat: 35, unit: "%", label: "mehr Aufträge",
     color: "#00D4A0",
-    desc: "Kein Auftrag geht mehr verloren, während du auf der Baustelle bist. Jeder Anruf wird angenommen und sofort qualifiziert.",
+    desc: "Kein Auftrag geht mehr verloren, während du auf der Baustelle bist. Jeder Anruf wird angenommen, qualifiziert und nachgefasst — bis zum Auftrag.",
     sample: { caller: "Neukundenanfrage", action: "Angebot angefragt", result: "Termin Mo 10:00" },
+    journey: [
+      { step: "Anruf", detail: "Angenommen" },
+      { step: "Angebot", detail: "Verschickt" },
+      { step: "Follow-up", detail: "Tag 3" },
+      { step: "Auftrag", detail: "Bestätigt" },
+      { step: "⭐ Bewertung", detail: "Automatisch" },
+    ],
   },
   {
     icon: (
@@ -25,8 +32,15 @@ const industries = [
     name: "Ärzte & Praxen",
     stat: 90, unit: "%", label: "weniger Wartezeit",
     color: "#00c3f0",
-    desc: "Patienten-Anrufe automatisch annehmen, kategorisieren und weiterleiten. Dein Team konzentriert sich auf das Wesentliche.",
+    desc: "Patienten-Anrufe automatisch annehmen, kategorisieren und weiterleiten. Erinnerungen, Recall-Kampagnen und Bewertungen vollautomatisch.",
     sample: { caller: "Terminanfrage", action: "Dringlichkeit erkannt", result: "Notfall priorisiert" },
+    journey: [
+      { step: "Termin", detail: "Gebucht" },
+      { step: "Erinnerung", detail: "24h vorher" },
+      { step: "Recall", detail: "Nach 6 Mon." },
+      { step: "Feedback", detail: "Automatisch" },
+      { step: "⭐ Bewertung", detail: "Gesichert" },
+    ],
   },
   {
     icon: (
@@ -38,8 +52,15 @@ const industries = [
     name: "Immobilienmakler",
     stat: 2, unit: "x", label: "mehr Besichtigungen",
     color: "#7C3AED",
-    desc: "Kein Interessent geht verloren — der Assistent qualifiziert sofort und bucht Besichtigungstermine direkt.",
+    desc: "Kein Interessent geht verloren — der Assistent qualifiziert sofort, bucht Besichtigungen und fasst automatisch nach bis zum Abschluss.",
     sample: { caller: "Kaufinteressent", action: "Budget qualifiziert", result: "Besichtigung Di 15:00" },
+    journey: [
+      { step: "Anfrage", detail: "Qualifiziert" },
+      { step: "Besichtigung", detail: "Gebucht" },
+      { step: "Follow-up", detail: "Tag 2" },
+      { step: "Angebot", detail: "Unterbreitet" },
+      { step: "⭐ Bewertung", detail: "Nach Abschluss" },
+    ],
   },
   {
     icon: (
@@ -50,8 +71,16 @@ const industries = [
     name: "Energievertrieb",
     stat: 85, unit: "%", label: "Zeitersparnis",
     color: "#fbbf24",
-    desc: "After-Sales, Lead-Reaktivierung und Follow-Ups vollautomatisch. Dein Vertriebsteam fokussiert sich auf den Abschluss.",
-    sample: { caller: "Bestandskunde", action: "Reaktivierung", result: "Follow-Up geplant" },
+    desc: "Im PV-Vertrieb braucht ein Kunde Ø 10–12 Kontaktpunkte bis zum Abschluss. Qualify.ai übernimmt jeden einzelnen — vollautomatisch.",
+    sample: { caller: "PV-Interessent", action: "10–12 Touchpoints", result: "Abschluss + Bewertung" },
+    journey: [
+      { step: "Erstkontakt", detail: "KI-Anruf" },
+      { step: "Follow-up 1–4", detail: "SMS & Mail" },
+      { step: "Follow-up 5–8", detail: "Anruf & Mail" },
+      { step: "Abschluss", detail: "Touchpoint 12" },
+      { step: "⭐ Bewertung", detail: "Automatisch" },
+    ],
+    highlight: "Ø 10–12 Touchpoints bis zum Abschluss — alle automatisch.",
   },
   {
     icon: (
@@ -62,8 +91,15 @@ const industries = [
     name: "Versicherungen",
     stat: 40, unit: "%", label: "mehr Abschlüsse",
     color: "#ec4899",
-    desc: "Jeder Erstkontakt wird professionell betreut — rund um die Uhr. Keine verpassten Chancen mehr.",
+    desc: "Jeder Erstkontakt wird professionell betreut — rund um die Uhr. Follow-ups, Angebote und Bewertungen vollautomatisch.",
     sample: { caller: "Neuinteressent", action: "Bedarf analysiert", result: "Beratung gebucht" },
+    journey: [
+      { step: "Erstberatung", detail: "Gebucht" },
+      { step: "Follow-up", detail: "Tag 5" },
+      { step: "Angebot", detail: "Nachgefasst" },
+      { step: "Abschluss", detail: "Gesichert" },
+      { step: "⭐ Bewertung", detail: "Automatisch" },
+    ],
   },
 ];
 
@@ -217,6 +253,38 @@ export default function IndustriesSection() {
                   <span className="pulse-dot scale-75" style={{ background: ind.color }} />
                   Gesamtdauer: ~45 Sekunden
                 </div>
+              </div>
+            </div>
+
+            {/* ── Kontaktpunkt-Journey (full cycle) ── */}
+            <div className="px-8 lg:px-10 pb-8 pt-0"
+              style={{ borderTop: `1px solid ${ind.color}10` }}>
+              <p className="text-[10px] uppercase tracking-widest font-bold mb-4 pt-6"
+                style={{ color: `${ind.color}55` }}>
+                Vollständiger Zyklus · inkl. Follow-ups & Bewertung
+              </p>
+              {"highlight" in ind && ind.highlight && (
+                <p className="text-xs mb-4 px-3 py-2 rounded-lg inline-block"
+                  style={{ background: `${ind.color}0d`, color: ind.color, border: `1px solid ${ind.color}20` }}>
+                  {ind.highlight}
+                </p>
+              )}
+              <div className="flex flex-wrap items-center gap-y-3">
+                {ind.journey.map((j, ji) => (
+                  <div key={ji} className="flex items-center gap-2">
+                    <div className="flex flex-col items-center">
+                      <span className="text-[10px] font-bold" style={{ color: ji === ind.journey.length - 1 ? ind.color : "rgba(255,255,255,0.6)" }}>
+                        {j.step}
+                      </span>
+                      <span className="text-[9px]" style={{ color: "rgba(255,255,255,0.2)" }}>{j.detail}</span>
+                    </div>
+                    {ji < ind.journey.length - 1 && (
+                      <svg className="shrink-0 mx-1" width="14" height="8" viewBox="0 0 14 8" fill="none">
+                        <path d="M0 4h12M9 1l3 3-3 3" stroke={ind.color} strokeOpacity="0.3" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
           </motion.div>

@@ -2,8 +2,10 @@ import ScrollProgress from "@/components/ScrollProgress";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import SocialProof from "@/components/SocialProof";
+import ProductOverviewSection from "@/components/ProductOverviewSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import IndustriesSection from "@/components/IndustriesSection";
+import TouchpointJourneySection from "@/components/TouchpointJourneySection";
 import LiveDemo from "@/components/LiveDemo";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import PricingSection from "@/components/PricingSection";
@@ -18,8 +20,10 @@ export default function Home() {
       <main>
         <Hero />
         <SocialProof />
+        <ProductOverviewSection />
         <FeaturesSection />
         <IndustriesSection />
+        <TouchpointJourneySection />
         <LiveDemo />
         <TestimonialsSection />
         <PricingSection />
