@@ -27,6 +27,7 @@ const plans = [
       "Einfache Lead-Vorqualifizierung",
       "Relevante Anfragen filtern",
       "Automatische Terminbuchung",
+      "Limitierte Kapazität (minutenbasiert)",
     ],
   },
   {
@@ -48,6 +49,7 @@ const plans = [
       "Echtzeit-Transkription",
       "Weniger Unterbrechungen im Alltag",
       "Automatische Info-Meldungen",
+      "Limitierte Kapazität (minutenbasiert)",
     ],
   },
   {
@@ -61,6 +63,7 @@ const plans = [
     ctaStyle: "purple",
     features: [
       "Alles aus Professional",
+      "Unbegrenzte Kapazität der Nutzung",
       "Persönlicher KI-Assistent",
       "Angebots- & Rechnungserstellung",
       "E-Mail-Kommunikation",

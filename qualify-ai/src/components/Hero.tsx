@@ -153,7 +153,7 @@ export default function Hero() {
             {/* ── Clip-up headline ─────────────────── */}
             <h1 className="font-black leading-[0.88] tracking-tight mb-7">
 
-              {/* "DEIN VERTRIEB" – line 1 */}
+              {/* "DEIN BETRIEB" – line 1 */}
               <div className="overflow-hidden">
                 <motion.span
                   initial={{ y: "108%" }}
@@ -161,7 +161,7 @@ export default function Hero() {
                   transition={{ duration: 0.95, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
                   className="block text-[clamp(54px,7.5vw,108px)] text-white"
                 >
-                  DEIN VERTRIEB
+                  DEIN BETRIEB
                 </motion.span>
               </div>
 
